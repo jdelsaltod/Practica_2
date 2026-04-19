@@ -24,7 +24,7 @@ def add_user():
         return render_template('errors/403.html'), 403
     username = request.form['username']
     password = request.form['password']
-    role = request.form['role']
+    role = request.form.get('role') if request.form.get('role') in ['user', 'owner', 'admin'] else 'user'
     company_id = request.form.get('company_id') if role == 'owner' else None
 
     conn = get_users_connection()
