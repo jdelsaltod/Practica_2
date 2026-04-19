@@ -7,7 +7,7 @@ def login():
     if 'username' in session:
         return redirect('/dashboard')
 
-    next_url = request.args.get('next', '/dashboard')
+    next_url = request.args.get('next', '/dashboard') if request.args.get('next', '').startswith('/') else '/dashboard'
 
     if request.method == 'POST':
         username = request.form['username']
