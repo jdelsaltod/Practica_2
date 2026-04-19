@@ -6,14 +6,21 @@ from server import app
 def login():
     if 'username' in session:
         return redirect('/dashboard')
+
     next_url = request.args.get('next', '/dashboard')
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+
         conn = get_users_connection()
-        user = conn.execute("SELECT * FROM users WHERE username = '"+ username +"' AND password = '"+hash_password(password)+"'").fetchone()
+        user = conn.execute(
+            "SELECT * FROM users WHERE username = ? AND password = ?",
+            (username, hash_password(password))
+        ).fetchone()
+
         conn.close()
-        
+
         if user:
             session['user_id'] = user['id']
             session['username'] = user['username']
@@ -24,6 +31,7 @@ def login():
         else:
             flash("Invalid username or password", "danger")
             return render_template('auth/login.html', next_url=next_url)
+
     return render_template('auth/login.html', next_url=next_url)
 
 
