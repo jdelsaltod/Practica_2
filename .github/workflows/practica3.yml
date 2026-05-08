@@ -1,0 +1,39 @@
+name: Practica 3 DevSecOps
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  security-checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Instalar herramientas de seguridad
+        run: |
+          pip install semgrep
+          pip install pip-audit
+
+      - name: Análisis SAST (Semgrep)
+        run: |
+          semgrep --config=auto .
+
+      - name: Análisis SCA (pip-audit)
+        run: |
+          pip-audit
+
+      - name: Fin
+        run: echo "Pipeline terminado"
