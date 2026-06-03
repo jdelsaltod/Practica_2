@@ -15,7 +15,7 @@
 {% block content %}
 <div class="d-flex justify-content-between align-items-start mb-3">
     <div>
-        <h2>{{ company['name']|safe }}</h2>
+        <h2>{{ company['name'] }}</h2>
         <p class="text-muted">{{ company['description']|safe }}</p>
     </div>
     {% if session['role'] == 'admin' %}
